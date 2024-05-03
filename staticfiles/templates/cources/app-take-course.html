@@ -1,0 +1,200 @@
+{% extends "base/base_cource.jinja2" %}
+{% load static %}
+
+{% block title %} Сдача теста {% endblock %}
+{% block rcontent %}
+    <div class="sidebar right sidebar-size-3 sidebar-offset-0 sidebar-visible-desktop sidebar-visible-mobile sidebar-skin-white"
+         id="sidebar-menu">
+        <div class="split-vertical">
+
+            <h4 class="category">Course Information</h4>
+            <div class="sidebar-block">
+                <div class="media margin-none">
+                    <div class="media-left">
+                        <a href="#sidebar-course-info" data-toggle="collapse">
+                            <span class="icon-block s30 bg-lightred"><i class="fa fa-github"></i></span>
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="sidebar-heading media-heading">
+                            <a href="#sidebar-course-info" data-toggle="collapse">Github Webhooks</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="collapse" id="sidebar-course-info">
+                    <br/>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias assumenda autem ...</p>
+                    <hr/>
+                    <p class="text-caption text-light">
+                        <i class="fa fa-clock-o fa-fw"></i> 4 hrs &nbsp;
+                        <i class="fa fa-calendar fa-fw"></i> 21/10/14
+                        <br/>
+                        <i class="fa fa-user fa-fw"></i> Instructor: Adrian Demian
+                        <br/>
+                        <i class="fa fa-user fa-fw"></i> Max. students: 50
+                        <br/>
+                        <i class="fa fa-check fa-fw"></i> Attending: 30
+                    </p>
+                    <hr/>
+                    <a class="btn btn-white btn-sm paper-shadow relative" data-animated data-z="0.5" data-hover-z="1"
+                       href="app-student-course.html">Course details</a>
+                </div>
+            </div>
+
+            <div class="split-vertical-body">
+                <div class="split-vertical-cell">
+                    <div data-scrollable>
+
+                        <ul class="sidebar-menu sm-bordered sm-active-item-bg">
+                            <li class="active"><a href="app-take-course.html">Curriculum</a></li>
+                            <li><a href="app-course-forums.html">Course Forums</a></li>
+                            <li><a href="app-take-quiz.html">Take Quiz</a></li>
+                            <li><a href="app-quiz-results.html">Quiz Results</a></li>
+                        </ul>
+
+                        <h4 class="category">Tutor</h4>
+                        <div class="sidebar-block">
+                            <div class="media v-middle">
+                                <div class="media-left">
+                                    <a href="" class="media-object">
+                                        <img class="img-circle" src="images/people/50/guy-1.jpg" alt="people"/>
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="sidebar-heading media-heading"><a href="">John. S</a></h4>
+                                    <p>Leading UX Designer</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block main %}
+    <div class="st-pusher" id="content">
+
+        <!-- sidebar effects INSIDE of st-pusher: -->
+        <!-- st-effect-3, st-effect-6, st-effect-7, st-effect-8, st-effect-14 -->
+
+        <!-- this is the wrapper for the content -->
+        <div class="st-content" style="margin-right: 100px">
+
+            <!-- extra div for emulating position:fixed of the menu -->
+            <div class="st-content-inner padding-top-none">
+
+                <div class="container-fluid">
+
+                    <div class="page-section">
+                        <div class="media media-grid v-middle">
+                            <div class="media-left">
+                                <span class="icon-block half bg-blue-300 text-white">2</span>
+                            </div>
+                            <div class="media-body">
+                                <h1 class="text-display-1 margin-none link-text-color">{{ category.name }}</h1>
+                            </div>
+                        </div>
+                        <br/>
+                        <p class="text-body-2">{{ category.description }}</p>
+                    </div>
+
+                    <h5 class="text-subhead-2 text-light">Учебный план</h5>
+                    {% for quiz in quizes %}
+                        <div class="panel panel-default curriculum {% if quizes.first.id == quiz.id %} open {% endif %} paper-shadow" data-z="0.5">
+                            <div class="panel-heading panel-heading-gray" data-toggle="collapse"
+                                 data-target="#curriculum-1">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <span class="icon-block img-circle bg-indigo-300 half text-white"><i
+                                                class="fa fa-graduation-cap"></i></span>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="text-headline">{{ quiz.title }}</h4>
+                                        <p>{{ quiz.description }}</p>
+                                    </div>
+                                </div>
+                                <span class="collapse-status collapse-open">Open</span>
+                                <span class="collapse-status collapse-close">Close</span>
+                            </div>
+                            <div class="list-group collapse in" id="curriculum-{{ quiz.id }}">
+                                <div class="list-group-item media" data-target="app-take-course.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">1.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-green-300"></i> Installation
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">2:03 min</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item media active" data-target="app-take-course.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">2.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-blue-300"></i> The MVC architectural pattern
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">25:01 min</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item media" data-target="app-take-course.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">3.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-grey-200"></i> Database Models
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">12:10 min</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item media" data-target="app-take-course.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">4.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-grey-200"></i> Database Access
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">1:25 min</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item media" data-target="app-take-course.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">5.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-grey-200"></i> Eloquent Basics
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">22:30 min</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item media" data-target="app-take-quiz.html">
+                                    <div class="media-left">
+                                        <div class="text-crt">6.</div>
+                                    </div>
+                                    <div class="media-body">
+                                        <i class="fa fa-fw fa-circle text-grey-200"></i> Take Quiz
+                                    </div>
+                                    <div class="media-right">
+                                        <div class="width-100 text-right text-caption">10:00 min</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <!-- /st-content-inner -->
+
+        </div mar>
+        <!-- /st-content -->
+
+    </div>
+{% endblock %}

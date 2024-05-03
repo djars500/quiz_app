@@ -1,0 +1,263 @@
+{% extends 'base/base.jinja2' %}
+{% load static %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+    <!-- Fixed navbar -->
+
+    <!-- sidebar effects OUTSIDE of st-pusher: -->
+    <!-- st-effect-1, st-effect-2, st-effect-4, st-effect-5, st-effect-9, st-effect-10, st-effect-11, st-effect-12, st-effect-13 -->
+
+    <!-- content push wrapper -->
+    <div class="st-pusher" id="content">
+
+        <!-- sidebar effects INSIDE of st-pusher: -->
+        <!-- st-effect-3, st-effect-6, st-effect-7, st-effect-8, st-effect-14 -->
+
+        <!-- this is the wrapper for the content -->
+        <div class="st-content">
+
+            <!-- extra div for emulating position:fixed of the menu -->
+            <div class="st-content-inner padding-none">
+
+                <div class="container-fluid">
+
+                    <div class="page-section">
+                        <h1 class="text-display-1 margin-none">Review</h1>
+                    </div>
+
+                    {#            <div class="panel panel-default">#}
+                    {#              <div class="media v-middle">#}
+                    {#                <div class="media-left">#}
+                    {#                  <div class="bg-green-400 text-white">#}
+                    {#                    <div class="panel-body">#}
+                    {#                      <i class="fa fa-credit-card fa-fw fa-2x"></i>#}
+                    {#                    </div>#}
+                    {#                  </div>#}
+                    {#                </div>#}
+                    {#                <div class="media-body">#}
+                    {#                  Your subscription ends on <span class="text-body-2">25 February 2015</span>#}
+                    {#                </div>#}
+                    {#                <div class="media-right media-padding">#}
+                    {#                  <a class="btn btn-white paper-shadow relative" data-z="0.5" data-hover-z="1" data-animated href="#">#}
+                    {#                Upgrade#}
+                    {#            </a>#}
+                    {#                </div>#}
+                    {#              </div>#}
+                    {#            </div>#}
+
+
+                    <div class="row" data-toggle="isotope">
+
+                        <div class="item col-xs-12 col-lg-6">
+                            <div>
+                                <canvas id="myChart"></canvas>
+                            </div>
+
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                            <script>
+                                const ctx = document.getElementById('myChart');
+
+
+                                var densityData = {
+                                    label: 'Max',
+                                    data: [{{ diagram.age.max_age }}, {{ diagram.gender_m }}, {{ diagram.score.max_score }}, 89, 95],
+                                    backgroundColor: 'rgba(0, 99, 132, 0.6)',
+                                    borderColor: 'rgba(0, 99, 132, 1)',
+                                    yAxisID: "y-axis-density"
+                                };
+
+                                var gravityData = {
+                                    label: 'Avg',
+                                    data: [{{ diagram.age.avg_age }}, {{ diagram.gender_w }}, {{ diagram.score.avg_score }}, 10, 20],
+                                    backgroundColor: 'rgba(99, 132, 0, 0.6)',
+                                    borderColor: 'rgba(99, 132, 0, 1)',
+                                    yAxisID: "y-axis-gravity"
+                                };
+
+                                var planetData = {
+                                    labels: ["Age", "Gender", "Score", "Attendance", "Mark"],
+                                    datasets: [densityData, gravityData]
+                                };
+
+
+                                var chartOptions = {
+                                    scales: {
+                                        xAxes: [{
+                                            barPercentage: 1,
+                                            categoryPercentage: 0.6
+                                        }],
+                                        yAxes: [{
+                                            id: "y-axis-density"
+                                        }, {
+                                            id: "y-axis-gravity"
+                                        }]
+                                    }
+                                };
+
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: planetData,
+                                    options: {chartOptions}
+                                });
+                            </script>
+
+                        </div>
+                        <div class="item col-xs-12 col-lg-6">
+                            <canvas id="oilChart"></canvas>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            <script>
+                                var oilCanvas = document.getElementById("oilChart");
+
+
+                                var oilData = {
+                                    labels: [
+                                        "Excellent",
+                                        "Good",
+                                        "Satisfactory",
+                                        "Fair",
+                                        "Fail"
+                                    ],
+                                    datasets: [
+                                        {
+                                            data: [142.3, 86.2, 52.2, 49.2, 43.2],
+                                            backgroundColor: [
+                                                "rgba(0, 255, 0, 0.8)",
+                                                "rgba(255, 255, 0, 0.8)",
+                                                "rgba(135, 206, 250, 0.8)",
+                                                "rgba(255, 165, 0, 0.8)",
+                                                "rgba(255, 0, 0, 0.8)"
+                                            ]
+                                        }]
+                                };
+
+                                var pieChart = new Chart(oilCanvas, {
+                                    type: 'pie',
+                                    data: oilData,
+                                    options: {
+                                        // Опции и настройки диаграммы
+                                        responsive: false, // Отключение автоматической адаптации размера
+                                        maintainAspectRatio: false, // Отключение сохранения соотношения сторон
+                                        height: 1100, // Задание высоты диаграммы в пикселях
+                                        width: 1100, // Задание ширины диаграммы в пикселях
+                                    }
+                                });
+
+                            </script>
+                        </div>
+                        <div class="item col-xs-12 col-lg-6">
+                            <div class="panel panel-default paper-shadow" data-z="0.5">
+                                <div class="panel-heading">
+                                    <h4 class="text-headline margin-none">Courses</h4>
+                                    <p class="text-subhead text-light">Courses you are taking</p>
+                                </div>
+                                <ul class="list-group">
+                                    {% for course in courses %}
+                                        <li class="list-group-item media v-middle">
+                                            <div class="media-body">
+                                                <a href="app-take-course.html"
+                                                   class="text-subhead list-group-link">{{ course.name }}</a>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="progress progress-mini width-100 margin-none">
+
+                                                    <div class="progress-bar progress-bar-green-300" role="progressbar"
+                                                         aria-valuenow="{{ course.sum_result }} / {{ quiz_count }}"
+                                                         aria-valuemin="0" aria-valuemax="100"
+                                                         style="width:45%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="panel-footer text-right">
+                                    <a class="btn btn-white paper-shadow relative"
+                                       data-z="0" data-hover-z="1" data-animated href="{% url 'courses' %}">All</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item col-xs-12 col-lg-6">
+                            <div class="panel panel-default paper-shadow" data-z="0.5">
+                                <div class="panel-body">
+                                    <h4 class="text-headline margin-none">Awards</h4>
+                                    <p class="text-subhead text-light">Your latest accomplishments</p>
+                                    <div class="icon-block half img-circle bg-purple-300">
+                                        <i class="fa fa-star text-white"></i>
+                                    </div>
+                                    <div class="icon-block half img-circle bg-indigo-300">
+                                        <i class="fa fa-trophy text-white"></i>
+                                    </div>
+                                    <div class="icon-block half img-circle bg-green-300">
+                                        <i class="fa fa-mortar-board text-white"></i>
+                                    </div>
+                                    <div class="icon-block half img-circle bg-orange-300">
+                                        <i class="fa fa-code-fork text-white"></i>
+                                    </div>
+                                    <div class="icon-block half img-circle bg-red-300">
+                                        <i class="fa fa-diamond text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default paper-shadow" data-z="0.5">
+                                <div class="panel-heading">
+                                    <h4 class="text-headline">Certificates
+                                        <small>({{ sertificates.count }})</small>
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    {% for sertificate in sertificates %}
+                                        <a href="{{ sertificate.file.url }}"
+                                           class="btn btn-default text-grey-400 btn-lg btn-circle paper-shadow relative"
+                                           data-hover-z="0.5" data-animated data-toggle="tooltip"
+                                           data-title="{{ sertificate.file.name }}">
+                                            <i class="fa fa-file-text"></i>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item col-xs-12 col-lg-6">
+                            <div class="panel panel-default paper-shadow" data-z="0.5">
+                                <div class="panel-heading">
+                                    <h4 class="text-headline margin-none">Results</h4>
+                                    <p class="text-subhead text-light">Your average level on tests</p>
+                                </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item media v-middle">
+                                        <div class="media-body">
+                                            <h4 class="text-subhead margin-none">
+                                                <a href="app-take-quiz.html" class="list-group-link"></a>
+                                            </h4>
+                                            <div class="caption">
+                                                <span class="text-light">Average score</span>
+                                            </div>
+                                        </div>
+                                        <div class="media-right text-center">
+                                            <div class="text-display-1">{{ test_result }}%</div>
+                                            <span class="caption text-light"></span>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                </div>
+
+            </div>
+            <!-- /st-content-inner -->
+
+        </div>
+        <!-- /st-content -->
+
+    </div>
+
+
+    <!-- /st-pusher -->
+{% endblock %}

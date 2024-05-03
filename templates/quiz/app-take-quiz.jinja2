@@ -1,0 +1,166 @@
+{% extends 'base/base_cource.jinja2' %}
+{% load static %}
+{% block title %}Тест{% endblock %}
+
+{% block rcontent %}
+     <div class="sidebar right sidebar-size-3 sidebar-offset-0 sidebar-visible-desktop sidebar-visible-mobile sidebar-skin-white"
+         id="sidebar-menu">
+        <div data-scrollable>
+            <h4 class="category">Time to complete</h4>
+            <div class="sidebar-block">
+                <div class="tk-countdown"></div>
+            </div>
+            <h4 class="category">Вопросы</h4>
+            {#            <ul class="sidebar-block list-group list-group-fit">#}
+            {#                {% for page in paginator %}#}
+            {#                    <li class="list-group-item">#}
+            {#                        <div class="media v-middle">#}
+            {#                            <div class="media-left">#}
+            {#                                <a class="icon-block s30 bg-green-400 text-white text-decoration-none">{{ page.number }}</a>#}
+            {#                            </div>#}
+            {#                            <div class="media-body">#}
+            {#                                {% for obj in page.object_list %}#}
+            {#                                    <a href="?page={{ page.number }}" class="sidebar-link">{{ obj.question_text }}</a>#}
+            {#                                {% endfor %}#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </li>#}
+            {#                {% endfor %}#}
+            {#            </ul>#}
+
+            <h4 class="category">Legend</h4>
+            <div class="sidebar-block">
+                <ul>
+                    <li><a href="#" class="sidebar-link"><span class="fa fa-fw fa-circle text-green-400"></span>
+                        Отвеченные вопросы</a></li>
+                    <li><a href="#" class="sidebar-link"><span class="fa fa-fw fa-circle text-blue-400"></span> Selected
+                        Выбранный вопрос</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main %}
+     <div class="st-pusher" id="content">
+
+        <!-- sidebar effects INSIDE of st-pusher: -->
+        <!-- st-effect-3, st-effect-6, st-effect-7, st-effect-8, st-effect-14 -->
+
+        <!-- this is the wrapper for the content -->
+        <div class="st-content">
+
+            <!-- extra div for emulating position:fixed of the menu -->
+            <div class="st-content-inner padding-top-none">
+
+                <div class="page-section half bg-white">
+                    <div class="container-fluid">
+                        <div class="section-toolbar">
+                            <div class="cell">
+                                <div class="media width-120 v-middle margin-none">
+                                    <div class="media-left">
+                                        <div class="icon-block bg-grey-200 s30"><i class="fa fa-question"></i></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="text-body-2 text-light margin-none">Вопросы</p>
+                                        <p class="text-title text-primary margin-none">{{ questions|length }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {#                {% for pa %}#}
+                <div class="page-section equal">
+                    <div class="container-fluid" style="margin-right: 100px">
+                        <div class="text-subhead-2 text-light">Вопрос {{ paged_items.number }}
+                            из {{ paged_items.paginator.count }}</div>
+                        <div class="panel panel-default paper-shadow" data-z="0.5">
+                            <div class="panel-heading">
+                                <h4 class="text-headline">{{ quiz.description }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <b class="text-body-3">{{ quiz.description }}.</b>
+                            </div>
+                        </div>
+
+                        <div class="text-subhead-2 text-light">Ваши ответы</div>
+                        {% if quiz.drag_drop %}
+                            <form id="form-box">
+                            {% csrf_token %}
+                            <article>
+                                <section id="content">
+                                    <div class="drop-elements">
+                                        {% for question in quiz.questions.all %}
+                                            <div value="{{ question.id }}"
+                                                 class="dropElement droppable">{{ question.question_text }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="drag-elements droppable multipleChildren hasChild">
+                                        {% for question in questions %}
+                                            <div id="{{ question.choice.first.id }}" class="dragElement greenBorder">
+                                                <img id="{{ question.choice.first.id }}" src="{{ question.choice.first.file.url }}"
+                                                     width="100%"
+                                                     height="100%" alt="">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <section>
+                                    <button class="btn-success btn" style="margin-top: 30px" type="submit">Отправить3</button>
+                            </article>
+
+                            </form>
+
+                        {% else %}
+
+                            <div class="panel panel-default paper-shadow" data-z="0.5">
+                                <form id="form-box">
+                                    <div class="panel-body">
+                                        {% for obj_question in objs %}
+                                            <b>{{ obj_question.question_text }}</b>
+                                            {% for answer in obj_question.get_answers %}
+                                                <div class="form-control radio">
+                                                    <input class="form-check-input answer" name="{{ obj_question.id }}"
+                                                           id="{{ answer.id }}" type="radio" value="{{ answer.id }}">
+                                                    <label class="form-check-label"
+                                                           for="{{ answer.id }}">{{ answer.text }}</label>
+                                                </div>
+                                            {% endfor %}
+                                            <br>
+                                        {% endfor %}
+                                        <button class="btn-success btn" type="submit">Отправить4</button>
+                                    </div>
+
+                                </form>
+{#                                <div class="panel-footer">#}
+{#                                    <div class="text-right">#}
+{#                                        {% if paged_items.has_previous %}#}
+{#                                            <a href="?page={{ paged_items.previoues_page_number }}"#}
+{#                                               class="btn btn-success"><i class="fa fa-save fa-fw"></i>Предыдущий#}
+{#                                            </a>#}
+{#                                        {% endif %}#}
+{#                                        {% if paged_items.has_next %}#}
+{#                                            <a href="?page={{ paged_items.next_page_number }}"#}
+{#                                               class="btn btn-primary"><i class="fa fa-chevron-right fa-fw"></i>#}
+{#                                                Следующий вопрос#}
+{#                                            </a>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
+{#                                </div>#}
+                            </div>
+
+                        {% endif %}
+                        <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+                        <script src="{% static 'js/part-iv.js' %}"></script>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /st-content-inner -->
+
+        </div>
+        <!-- /st-content -->
+
+    </div>
+{% endblock %}
