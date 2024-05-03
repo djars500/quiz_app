@@ -1,8 +1,0 @@
-[
-	{
-		"task": "learning-maps-data",
-		"cwd": "src/js/themes/html/maps_data",
-		"src": "*.json",
-		"dest": "js/data/google_maps"
-	}
-]

@@ -1,5 +1,0 @@
-{
-	"build": "js/app/messages.js",
-	"cwd": "lib/messages/js",
-	"files": ["_breakpoints.js"]
-}
