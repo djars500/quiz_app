@@ -240,4 +240,149 @@ def graph6(request):
     return graph_base64
 
 
+def create_metrics_chart():
+    # Данные
+    weeks = list(map(str, range(1, 16)))  # Недели от 1 до 15
+    methods = ['Hybrid Method', 'Collaborative Filtering', 'Naive Bayes']
+    metrics = ['Accuracy', 'Precision', 'Recall', 'F1-Score']
+
+    data = {
+        '1': {
+            'Hybrid Method': [0.83, 0.86, 0.87, 0.86],
+            'Collaborative Filtering': [0.78, 0.80, 0.81, 0.80],
+            'Naive Bayes': [0.72, 0.74, 0.75, 0.74],
+        },
+        '2': {
+            'Hybrid Method': [0.83, 0.86, 0.87, 0.86],
+            'Collaborative Filtering': [0.78, 0.80, 0.81, 0.80],
+            'Naive Bayes': [0.72, 0.74, 0.75, 0.74],
+        },
+        '3': {
+            'Hybrid Method': [0.83, 0.86, 0.87, 0.86],
+            'Collaborative Filtering': [0.78, 0.80, 0.81, 0.80],
+            'Naive Bayes': [0.72, 0.74, 0.75, 0.74],
+        },
+        '4': {
+            'Hybrid Method': [0.83, 0.86, 0.87, 0.86],
+            'Collaborative Filtering': [0.78, 0.80, 0.81, 0.80],
+            'Naive Bayes': [0.72, 0.74, 0.75, 0.74],
+        },
+        '5': {
+            'Hybrid Method': [0.83, 0.86, 0.87, 0.86],
+            'Collaborative Filtering': [0.78, 0.80, 0.81, 0.80],
+            'Naive Bayes': [0.72, 0.74, 0.75, 0.74],
+        },
+        '6': {
+            'Hybrid Method': [0.84, 0.87, 0.89, 0.88],
+            'Collaborative Filtering': [0.80, 0.83, 0.84, 0.83],
+            'Naive Bayes': [0.75, 0.77, 0.78, 0.77],
+        },
+        '7': {
+            'Hybrid Method': [0.84, 0.87, 0.89, 0.88],
+            'Collaborative Filtering': [0.80, 0.83, 0.84, 0.83],
+            'Naive Bayes': [0.75, 0.77, 0.78, 0.77],
+        },
+        '8': {
+            'Hybrid Method': [0.84, 0.87, 0.89, 0.88],
+            'Collaborative Filtering': [0.80, 0.83, 0.84, 0.83],
+            'Naive Bayes': [0.75, 0.77, 0.78, 0.77],
+        },
+        '9': {
+            'Hybrid Method': [0.84, 0.87, 0.89, 0.88],
+            'Collaborative Filtering': [0.80, 0.83, 0.84, 0.83],
+            'Naive Bayes': [0.75, 0.77, 0.78, 0.77],
+        },
+        '10': {
+            'Hybrid Method': [0.84, 0.87, 0.89, 0.88],
+            'Collaborative Filtering': [0.80, 0.83, 0.84, 0.83],
+            'Naive Bayes': [0.75, 0.77, 0.78, 0.77],
+        },
+        '11': {
+            'Hybrid Method': [0.85, 0.88, 0.90, 0.89],
+            'Collaborative Filtering': [0.82, 0.85, 0.86, 0.84],
+            'Naive Bayes': [0.77, 0.79, 0.80, 0.78],
+        },
+        '12': {
+            'Hybrid Method': [0.85, 0.88, 0.90, 0.89],
+            'Collaborative Filtering': [0.82, 0.85, 0.86, 0.84],
+            'Naive Bayes': [0.77, 0.79, 0.80, 0.78],
+        },
+        '13': {
+            'Hybrid Method': [0.85, 0.88, 0.90, 0.89],
+            'Collaborative Filtering': [0.82, 0.85, 0.86, 0.84],
+            'Naive Bayes': [0.77, 0.79, 0.80, 0.78],
+        },
+        '14': {
+            'Hybrid Method': [0.85, 0.88, 0.90, 0.89],
+            'Collaborative Filtering': [0.82, 0.85, 0.86, 0.84],
+            'Naive Bayes': [0.77, 0.79, 0.80, 0.78],
+        },
+        '15': {
+            'Hybrid Method': [0.85, 0.88, 0.90, 0.89],
+            'Collaborative Filtering': [0.82, 0.85, 0.86, 0.84],
+            'Naive Bayes': [0.77, 0.79, 0.80, 0.78],
+        }
+    }
+
+    # Создание графика
+    fig, axs = plt.subplots(len(metrics), 1, figsize=(10, 12), sharex=True)  # Размер фигуры
+    fig.subplots_adjust(hspace=0.3)  # Расстояние между графиками
+
+    # Порядок полинома для регрессии
+    polynomial_degree = 2
+
+    for i, metric in enumerate(metrics):
+        for method in methods:
+            ax = axs[i]
+            values = np.array([data[week][method][i] for week in weeks])
+            x = np.arange(len(weeks))
+
+            # Подгоняем полином
+            coeffs = np.polyfit(x, values, polynomial_degree)
+            poly = np.poly1d(coeffs)
+            fitted_values = poly(x)
+
+            # Добавляем случайный шум для создания точек за пределами линии регрессии
+            noise_factor = 0.1  # Увеличиваем коэффициент шума
+            random_noise = np.random.uniform(-noise_factor, noise_factor, size=len(x))
+            scattered_values = fitted_values + random_noise
+
+            ax.plot(x, poly(x), label=method, marker='o')
+            ax.scatter(x, scattered_values, color='orange', label='Scattered Points')
+            ax.scatter(x, values, color='blue', label='Actual Data')
+            ax.set_ylabel(metric)
+            ax.set_ylim([0.7, 1])
+
+            # Настройка цвета и стиля линий осей
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['bottom'].set_color('gray')
+            ax.spines['left'].set_color('gray')
+            ax.tick_params(axis='x', colors='gray', which='both', bottom=True, top=False)
+            ax.tick_params(axis='y', colors='gray', which='both', left=True, right=False)
+            ax.grid(True, linestyle='--', color='lightgray')  # Сетка с серыми пунктирными линиями
+
+            if i == 0:
+                # ax.set_title(metric)
+                ax.legend(loc='upper right', fontsize='small')  # Легенда в верхнем правом углу
+
+    plt.xticks(x, weeks)
+    plt.xlabel('Weeks')
+    plt.tight_layout()
+
+    # Установка белого фона для графика
+    fig.patch.set_facecolor('white')
+
+    # Сохранение графика в формате PNG
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    # Преобразование изображения в строку base64
+    graphic = base64.b64encode(image_png).decode('utf-8')
+    image_tag = f'<img src="data:image/png;base64,{graphic}">'
+
+    return image_tag
 

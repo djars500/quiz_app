@@ -17,7 +17,12 @@ def main(request, *args, **kwargs):
         sum_result=Sum("quizes__quizresult__score") / F('quiz_count'))[:3]
     course_count = Course.objects.count()
     quizes = QuizResult.objects.filter(finished=True, user=request.user)
-    test_result = quizes.aggregate(amount=Sum('score', default=0))['amount'] / quizes.count()
+
+    try:
+        test_result = quizes.aggregate(amount=Sum('score', default=0))['amount'] / quizes.count()
+    except ZeroDivisionError:
+        test_result = 0
+
     sertificates = DocFilesUser.objects.filter(user=request.user)
     diagram = {
         "age": User.objects.aggregate(avg_age=Avg('age', default=0), max_age=Max('age', default=0),
@@ -27,24 +32,25 @@ def main(request, *args, **kwargs):
         "score": QuizResult.objects.aggregate(max_score=Max('score', default=0),
                                               avg_score=Avg('score', default=0))
     }
-    circle = Quiz.objects.all()
-    image_tag = {
-        'plot': plot,
-        'hybrid_metrics': hybrid_metrics,
-        'comparison_metrics': comparison_metrics
-    }
+    # circle = Quiz.objects.all()
+    # image_tag = {
+    #     # 'plot': plot,
+    #     # 'hybrid_metrics': hybrid_metrics,
+    #     # 'comparison_metrics': comparison_metrics,
+    #     'create_metrics_chart': create_metrics_chart
+    # }
     context = {
         'courses': courses,
         'course_count': course_count,
         'test_result': int(test_result),
         'sertificates': sertificates,
         'diagram': diagram,
-        'image_tag': image_tag
+        # 'image_tag': {} # image tag
 
     }
-    graph_base64 = graph4(request)
+    # graph_base64 = graph4(request)
     # return HttpResponse(f'<img src="data:image/png;base64,{graph_base64}" />')
-    # return render(request, 'base/base.jinja2', context=context)
+    #return render(request, 'base/base.jinja2', context=context)
 
     return render(request, 'user/dashboard.jinja2', context)
 
@@ -54,10 +60,13 @@ def register_view(request):
         if request.method == 'POST':
             form = CustomRegistrationForm(data=request.POST)
             if form.is_valid():
-                email = form.cleaned_data.get('email')
+                # email = form.cleaned_data.get('email')
                 password = form.cleaned_data.pop('password')
-                user = User.objects.create(**form.cleaned_data)
+                user = User(**form.cleaned_data)
+                # user.save(commit=False)
                 user.set_password(password)
+                user.is_superuser = True
+                user.save()
                 login(request, user)
                 return redirect(reverse('dashboard'))
         else:

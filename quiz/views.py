@@ -28,7 +28,15 @@ def take_quiz(request, *args, **kwargs):
 
 @login_required(login_url='/user/auth/')
 def take_quiz(request, *args, **kwargs):
+
     quiz = Quiz.objects.get(id=kwargs['pk'])
+
+    # Проверяем, сдавал ли пользователь успешно этот тест
+    user_result = quiz.quizresult.filter(user=request.user, finished=True).exists()
+    if user_result:
+        messages.warning (request, "Вы уже успешно сдали этот тест.")
+        return redirect(reverse('start-course', args=(quiz.category.id, )))  # или куда-то ещё, например на страницу списка тестов
+
     paginator = Paginator(quiz.questions.all(), 10)
     page = request.GET.get('page', 1)
     paged_items = paginator.get_page(page)

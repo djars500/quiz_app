@@ -29,7 +29,7 @@ class Quiz(models.Model):
     category = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='quizes', verbose_name='Категория',
                                  null=True, blank=True)
 
-    def get_finished_results(self):
+    def get_finished_results(self, *args, **kwargs):
         return self.quizresult.filter(finished=True)
 
     def get_max_score(self):

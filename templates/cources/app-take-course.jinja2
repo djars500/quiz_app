@@ -1,6 +1,5 @@
 {% extends "base/base_cource.jinja2" %}
 {% load static %}
-
 {% block title %} Сдача теста {% endblock %}
 {% block rcontent %}
 
@@ -157,7 +156,8 @@
                                         <i class="fa fa-fw fa-circle text-yellow-300"></i>Результат
                                     </div>
                                     <div class="media-right">
-                                        <div class="width-100 text-right strong">{{ quiz.get_max_score }}%</div>
+{#                                        <div class="width-100 text-right strong">{{ quiz.get_max_score }}%</div>#}
+                                        {#<div class="width-100 text-right strong">{% get_max_score quiz request.user %}%</div>#}
                                     </div>
                                 </div>
                             </div>
