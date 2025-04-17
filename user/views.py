@@ -99,4 +99,15 @@ def logout_view(request):
 
 @login_required(login_url='auth')
 def profile_view(request):
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+
+        password = request.POST.get('password')
+        if password is not None:
+            user.set_password(password)
+
+        user.save()
+        return redirect(reverse('profile'))  # или куда тебе нужно
     return render(request, 'user/app-student-profile.jinja2', {})
