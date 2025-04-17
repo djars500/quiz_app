@@ -105,7 +105,7 @@ def profile_view(request):
         user.last_name = request.POST.get('last_name', user.last_name)
 
         password = request.POST.get('password')
-        if password is not None:
+        if password is not None and password != '':
             user.set_password(password)
 
         user.save()
