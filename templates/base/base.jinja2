@@ -156,8 +156,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses<span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="app-directory-list.html">My courses</a></li>
-                            <li><a href="app-student-course.html">Buy course</a></li>
+                            <li><a href="{% url 'courses' %}">My courses</a></li>
                         </ul>
                     </li>
                     <li class="dropdown active">
@@ -166,8 +165,7 @@
                         <ul class="dropdown-menu">
                             <li class="active"><a href="{% url 'dashboard' %}">Main</a></li>
                             <li><a href="{% url 'courses' %}">My courses</a></li>
-                            <li><a href="app-take-course.html">Take test</a></li>
-                            <li><a href="app-student-profile.html">Edit profile</a></li>
+                            <li><a href="{% url 'profile' %}">Edit profile</a></li>
                         </ul>
                     </li>
 
@@ -277,13 +275,11 @@
                     <a href="#course-menu"><i class="fa fa-mortar-board"></i><span>Courses</span></a>
                     <ul id="course-menu">
                         <li><a href="{% url 'courses' %}"><span>My courses</span></a></li>
-                        <li><a href="app-student-course.html"><span>Take test</span></a></li>
                     </ul>
                 </li>
                 <li class="hasSubmenu">
                     <a href="#account-menu"><i class="fa fa-user"></i><span>Profile</span></a>
                     <ul id="account-menu">
-                        <li><a href="app-student-profile.html"><span>Edit</span></a></li>
                     </ul>
                 </li>
                 <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i><span>Logout</span></a></li>
@@ -847,7 +843,7 @@
     {% endblock %}
     <!-- Footer -->
     <footer class="footer">
-        <strong>Learning</strong> v1.1.0 &copy; Copyright 2015
+        <strong>Learning</strong> v1.1.0 &copy; Copyright 2023
     </footer>
     <!-- // Footer -->
 

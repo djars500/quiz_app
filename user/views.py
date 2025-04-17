@@ -55,6 +55,10 @@ def main(request, *args, **kwargs):
     return render(request, 'user/dashboard.jinja2', context)
 
 
+def landing_page(request):
+    return render(request, 'base/index.jinja2', {})
+
+
 def register_view(request):
     with transaction.atomic():
         if request.method == 'POST':
@@ -91,6 +95,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+
 
 @login_required(login_url='auth')
 def profile_view(request):
