@@ -4,6 +4,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.db.models import Max
 from user.models import User
 
+from django.utils import timezone
 
 class Course(models.Model):
     name = models.CharField(verbose_name='Категория курса', max_length=255)
@@ -81,7 +82,7 @@ class QuizResult(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="quizresult")
     score = models.IntegerField()
     finished = models.BooleanField(default=False, verbose_name='Успешно пройден')
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=False, default=timezone.now)
 
     def __str__(self):
         return f"{self.user.email} - {self.score}"
